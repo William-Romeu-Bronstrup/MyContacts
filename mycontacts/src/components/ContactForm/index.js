@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -11,43 +11,57 @@ import Button from '../Button';
 
 export default function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [category, setCategory] = useState('');
 
-  const emailInput = useRef(null);
+  function handleSubmit(event) {
+    event.preventDefault();
 
-  function handleClick() {
-    console.log(emailInput.current.value);
+    console.log({
+      name,
+      email,
+      phone,
+      category,
+    });
   }
 
-  console.log('renderizou');
-
   return (
-    <Form>
-      <button type="button" onClick={handleClick}>
-        Loga emailInput
-      </button>
+    // eslint-disable-next-line react/jsx-no-bind
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Input
-          value={name}
           placeholder="Nome"
+          value={name}
           onChange={(event) => setName(event.target.value)}
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup error="O formato do e-mail é inválido.">
         <Input
           placeholder="E-mail"
-          ref={emailInput}
-          onChange={(event) => console.log(event.target.value)}
+          error
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       </FormGroup>
 
       <FormGroup>
-        <Input placeholder="Telefone" />
+        <Input
+          placeholder="Telefone"
+          value={phone}
+          onChange={(event) => setPhone(event.target.value)}
+        />
       </FormGroup>
 
       <FormGroup>
-        <Select>
+        <Select
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+        >
+          <option value="">Categoria</option>
           <option value="instagram">instagram</option>
+          <option value="discord">Discord</option>
         </Select>
       </FormGroup>
 
