@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
 import PropTypes from 'prop-types';
+import isEmailValid from '../../utils/isEmailValid';
+import useErrors from '../../hooks/useErrors';
 
 import { Form, ButtonContainer } from './styles';
 
@@ -15,34 +17,56 @@ export default function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
+  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
+
+  function handleNameChange(event) {
+    setName(event.target.value);
+
+    if (!event.target.value) {
+      setError({ field: 'name', message: 'Nome é obrigatório.' });
+    } else {
+      removeError('name');
+    }
+  }
+
+  function handleEmailChange(event) {
+    setEmail(event.target.value);
+
+    if (event.target.value && !isEmailValid(event.target.value)) {
+      setError({ field: 'email', message: 'E-mail inválido.' });
+    } else {
+      removeError('email');
+    }
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
 
     console.log({
-      name,
-      email,
-      phone,
-      category,
+      name, email, phone, category,
     });
   }
 
   return (
     // eslint-disable-next-line react/jsx-no-bind
     <Form onSubmit={handleSubmit}>
-      <FormGroup>
+      <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
+          error={getErrorMessageByFieldName('name')}
           placeholder="Nome"
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          // eslint-disable-next-line react/jsx-no-bind
+          onChange={handleNameChange}
         />
       </FormGroup>
 
-      <FormGroup error="O formato do e-mail é inválido.">
+      <FormGroup error={getErrorMessageByFieldName('email')}>
         <Input
+          error={getErrorMessageByFieldName('email')}
           placeholder="E-mail"
-          error
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          // eslint-disable-next-line react/jsx-no-bind
+          onChange={handleEmailChange}
         />
       </FormGroup>
 
