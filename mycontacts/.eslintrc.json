@@ -26,6 +26,7 @@
     "react/function-component-definition": [1, {
       "namedComponents": "function-declaration",
       "unnamedComponents": "function-expression"
-    }]
+    }],
+    "react/jsx-no-bind": 0
   }
 }
